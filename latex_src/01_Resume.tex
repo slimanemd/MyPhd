@@ -1,0 +1,56 @@
+﻿\selectlanguage{english} 
+
+
+\begin{abstract}
+
+\begin{center}					%\flushleft{Sujet de la th\`ese :}\ \\   \ \\
+{\large {\bf Scheduling of DAG with data placement on multicore NUMA platform\\ }}
+\end{center}
+
+%\justify
+Directed acyclic graphs (DAG) based scheduling algorithms in traditional computing paradigms focus more on computational tasks and less than on the data placement during scheduling mapping. In the hierarchical memories context, this behavior will have negative impact on performance of system. With the introduction of non-uniform memory access (NUMA) multicore architectures, simultaneous optimization of computation and data placement in DAG based scheduling and mapping become the most challenging topics in scheduling related research. Such architecture exposes multilevel hierarchical memories with different characteristics which make the cost of the communication different in each level. From the other side, some interdependent tasks are communication intensive tasks that need to load and store their data frequently from the memory depending on data location, the performance of such system and its scheduler depends not only on its threads scheduling decision but also on its data locality decision (the mapping of the thread data).
+
+In this thesis, we tackle the problem of the scheduling parallel applications described by DAG in target platforms by exploring case where not just computation and communication are considered in scheduling decision but also data placement on hierarchical memories platforms. The current scheduling and mapping policies try to reduce the overall penalties of the remote access by taking into account the data locality in the scheduling decisions. But most of the work done is for independent tasks context with static initialization. To do this for DAG application execution on the hierarchical platforms, it is necessary to find a way to combine both policies to get the most appropriate decision about when and where to schedule thread and where to place its data. 
+In this work, we will: 
+
+\begin{enumerate}
+\item Include the platform topology information (supplied by run-time environment at start time of application).
+\item Use the application pattern (application structure provided by developers).
+\item Divide the tasks set to a number of disjoint sets based on this structure and on task state.
+\item Wide the tasks visibility by exploring a large horizon in order to gather more information about the state of current process running DAG.
+\item Balance the load using distance based work stealing strategy at run-time.
+\end{enumerate}
+
+These are the main ideas of the proposed scheduling and mapping policy of this work integrated as heuristics in this process to guide it and to reduce the impact of NUMA penalties on the completion total time of the DAG and preserve the system performance.
+
+\textbf{Key words} : Task graph, DAG based scheduling, mapping, data locality, Multicore machines, NUMA architectures, Hierarchical platforms, Execution Horizon, Work stealing, Load balancing.
+
+%\justify
+\end{abstract}
+
+\newpage
+\selectlanguage{french} 
+\begin{abstract}
+
+\begin{center}					%\flushleft{Sujet de la th\`ese :}\ \\   \ \\
+{\large {\bf Ordonnancement d'un DAG avec transfert des données sur une plateforme NUMA multicore \\ }}
+\end{center}
+
+Les algorithmes d'ordonnancement des graphes de tâches (DAG) selon l’approche classique se concentrent davantage sur les tâches de calcul et leurs dépendances ( communi-cation ) et donnent moins d’importance au placement des données lors de l'allocation. Dans le contexte des plateformes hiérarchiques, ne pas placer les données des threads de façon appropriée impacte les performances du système. Avec l'introduction des architectures d'accès non uniforme à la mémoire (NUMA), l'optimisation simultanée du placement des threads et des données d’un DAG est devenue cruciale. Une telle architecture possede un système de mémoire hiérarchique multi niveaux avec des caractéristiques différentes qui rend le coût de la communication différent dans chaque niveau. Une bonne partie du temps des tâches dépendantes orientées données se consomme en chargeant ou sauvegardant ses données de la mémoire en fonction du placement initial. Les performances d’un tel système et son ordonnanceur dépendent non seulement de sa décision d’affectation des threads mais aussi de sa décision du placement des données.
+
+Dans cette thèse, nous abordons le problème de l'ordonnancement d'applications parallèles décrites par un DAG sur la plateforme cible en explorant le cas où non seulement le calcul et la communication sont considérés, mais aussi le placement de données sur les plateformes hiérarchiques. Les politiques courantes de l’ordonnancement et l'allocation de la mémoire tentent d’atténuer l’effet NUMA en réduisant la pénalité d’accès distant à la mémoire en tenant en compte la localité des données lors de la décision de l’ordonnancement. Ce travail propose  de :
+
+\begin{enumerate}
+\item Inclure l’information sur la topologie (fournie par l’environnement runtime au début de l’exécution de l’application) de la plateforme.
+\item Utiliser le motif de l’application (sa classe information fournie par le développeur de l’application) à exécuter.
+\item Regrouper les tâches dans des classes disjointes en se basant sur cette structure et l'état de la tâche.
+\item Elargir le champs de visibilité des tâches en explorant un large horizon afin de collecter plus d'informations sur l'état courant du processus d'éxecution de DAG.
+\item Equilibrer la charge au temps d’exécution en utilisant la stratégie de vol de travail basée sur la distance.
+\end{enumerate}
+
+Comme idées de bases, ces propositions seront integrées comme heuristiques dans la politique de l’ordonnancement des threads et le placement des données pour guider ce processus et l'aider à réduire l’effet NUMA sur le temps total d’exécution d’un DAG et de préserver les performances du système.
+
+%\justify
+\textbf{Mots-clés} : Graphe de tâches, Ordonnancement DAG, Placement, Localité de données, Machines multicœurs, Architectures NUMA, Caches hiérarchiques, Horizon d'éxecution, Vol de travail, Equilibrage de charge.
+%\justify
+\end{abstract}

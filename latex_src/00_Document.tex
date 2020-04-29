@@ -1,0 +1,86 @@
+%These 
+\documentclass[a4paper, 12pt]{report}
+%--------------------------------------------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[arabic, english, french]{babel}   							
+\usepackage{arabtex}
+\usepackage[T1]{fontenc}                             							
+\usepackage{ragged2e} 			
+\usepackage{threeparttable,booktabs,multirow,lscape}
+\usepackage[letterpaper,margin=1in]{geometry} 
+\usepackage[backend=bibtex, style=alphabetic]{biblatex} 					
+\usepackage{rotating}
+\usepackage[ruled,vlined,french]{algorithm2e}
+\usepackage{graphicx}                    								
+\usepackage{pdflscape}
+\usepackage{afterpage}
+\usepackage{capt-of}										
+\usepackage{xcolor}
+\usepackage{fancyvrb}    										
+\usepackage[colorlinks=true,linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage{setspace}
+%
+\addbibresource{21_Bibliographie.bib} 
+\graphicspath{ {data/} } 
+%------------------------------------------------------------------------------------------------------
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+
+\geometry{ a4paper, total={170mm,257mm}, left=25mm, top=25mm, }
+%------------------------------------------------------------------------------------------------------
+\setlength{\parindent}{4em}
+\setlength{\parskip}{0.5em}     
+\renewcommand{\baselinestretch}{1} 
+%------------------------------------------------------------------------------------------------------
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{calc}
+%
+\newcommand{\definebox}[2]{
+    \newcounter{#1}
+    \newenvironment{#1}[1][]{
+        \stepcounter{#1}
+        \mdfsetup{
+            frametitle={
+                \tikz[]
+                \node[rectangle,fill=white]{\strut \MakeUppercase#1~\csname the #1\endcsname\ifstrempty{##1}{}{:~##1}};
+            }
+        }
+        \mdfsetup{innertopmargin=1pt, linecolor=#2, linewidth=1pt,topline=true, frametitleaboveskip={\dimexpr (\ht\strutbox)*-1\relax},}   %
+        \begin{mdframed}[]\relax
+        }
+       {\end{mdframed}}
+}
+%------------------------------------------------------------------------------------------------------
+\definebox{définition}{}
+
+%------------------------------------------------------------------------------------------------------
+\begin{document}
+	\input{00_Page_de_garde} \thispagestyle{empty}
+	\input{01_Banner}      	     \thispagestyle{empty}
+	\input{01_Dedicace}     	\thispagestyle{empty}
+	\input{01_Resume}    	     \thispagestyle{empty}
+	\input{01_Resumea}    	  	\thispagestyle{empty} 
+	\input{01_Remerciement} 	\thispagestyle{empty}
+%
+	\begin{spacing}{0.04}
+	\tableofcontents 				\thispagestyle{empty}
+	\listoffigures 					\thispagestyle{empty}
+	\listoftables 					\thispagestyle{empty}
+	\listofalgorithms 				\thispagestyle{empty}
+	\input{01_Abbreviations} 	\thispagestyle{empty}
+	\end{spacing}
+%
+	\clearpage
+	\pagenumbering{arabic}
+	\input{05_Introduction}
+	\input{11_Chapter01}            
+	\input{11_Chapter02}            
+	\input{12_Chapter02}
+	\input{13_Chapter03}
+	\input{14_Chapter04}
+	\input{20_Conclusion}
+	\printbibliography[heading=bibintoc,title={References}]
+\end{document}

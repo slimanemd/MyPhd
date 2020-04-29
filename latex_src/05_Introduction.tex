@@ -1,0 +1,115 @@
+﻿\chapter{Introduction} 
+\justify \hspace{\parindent}
+Au début des années deux mille, l'industrie des \textbf{microprocesseurs} a atteint sa limite avec sa version initiale des \textbf{monoprocesseurs} en se heurtant aux 3 murs qui ont freiné la \textbf{loi de Moore} \cite{moor65} après 50 ans de prédiction.
+%
+Par conséquent, l'industrie a opté pour des \textbf{architectures multicœurs} intégrant plusieurs \textbf{cœurs} (core ou unités de calcul) sur une même puce où chaque cœur dispose de sa propre \textbf{mémoire cache} ou partagée avec les autres cœurs, d'une \textbf{mémoire principale} commune constituée de plusieurs bancs de mémoires 
+le tout par son organisation physique forme une \textbf{hiérarchie de mémoire} de plusieurs niveaux, 
+ainsi le système dispose de suffisamment de ressources pour traiter en parallèle les \textbf{applications multitâches}. 
+%
+L’évolution de l'informatique a pris une autre direction plus spectaculaire, une autre aventure commence l'informatique parallèle grand publique ou le coût des ressources de calcul devient abordable et l'exécution parallèle des applications n'est plus un luxe (s'est démocratisée). 
+%
+Cette évolution n'était pas suivie par une conception des \textbf{modèles de programmation parallèle} et des outils logiciels adaptés à ces ressources (les systèmes de hautes performances d'aujourd'hui sont composés de centaines de cœurs et les systèmes futurs en intègreront des milliers - systèmes massivement parallèles).
+%
+Les architectures parallèles récentes ne cessent pas de se complexifier, des \textbf{plateformes multicœurs multi-socket} intégrant plusieurs nœuds de calcul sur une même carte mère ou puce (multicœurs multisocket or multisocket Network on Chip MSNoC) \cite{msoc00} ont été conçues comme solution aux \textbf{problèmes du bus  partagé} (congestion) dans les \textbf{architectures symétriques (SMP)} \cite{qaca17}.  
+Afin de fournir une \textbf{bande passante} mémoire suffisante dans ces systèmes, la mémoire vive est distribuée physiquement sur plusieurs \textbf{contrôleurs mémoire} associe à un \textbf{nœud} avec un \textbf{accès non-uniforme à la mémoire (NUMA)} \cite{qaca17}. 
+
+\section{Problématique et motivation} %
+\justify \hspace{\parindent}
+En raison de la complexité de ce dernier type d'architectures parallèles, les \textbf{coûts d'accès mémoire} peuvent varier en fonction de la distance entre le processeur et le banc mémoire accédé. 
+%
+Ce fait a introduit une \textbf{pénalité} sur le \textbf{temps d'exécution total} des \textbf{applications parallèles} qui s'exécutent sur les nœuds de cette plateforme \cite{qaca17}. 
+%
+D'un autre coté, vu que le nombre de cœurs est devenu très élevé dans les  architectures modernes (manycore), telles machines entraînant des accès mémoire concurrents qui conduisent à des ponts chauds sur des bancs mémoire, générant des \textbf{problèmes d'équilibrage de charge}, de \textbf{contention mémoire} et d'\textbf{accès distants} \cite{qaca17}.   
+%
+Des travaux de recherche récents ont identifié les \textbf{modèles de programmation} à base de \textbf{tâches} indépendantes à \textbf{granularité} fine comme une approche clé pour exploiter la puissance de calcul des architectures généralistes massivement parallèles \cite{qaca17}. 
+
+\justify \hspace{\parindent}
+Toutefois, peu de recherches ont été conduites sur l'optimisation dynamique des programmes parallèles à base de \textbf{tâches dépendante} afin de réduire l'impact négatif sur les performances résultant de l'\textbf{effet NUMA}.
+
+\justify \hspace{\parindent}
+Les plates-formes multicœurs avec un accès mémoire non uniforme (MC-NUMA) sont devenues des ressources usuelles de \textbf{calcul haute performance}.
+
+\justify \hspace{\parindent}
+Par conséquent, les principaux défis sur les plates-formes NUMA pour \textbf{ordonnan-cer} une application parallèle décrite par un \textbf{graphe de tâches dépendantes acyclique (DAG)} sont :
+
+\justify \hspace{\parindent}
+1- \textit{Réaliser la bonne \textbf{allocation tâche/thread-nœud} (Trouver l'ordre optimal ou proche pour exécuter les tâches de ce DAG sur les nœuds de la plate-forme).}
+
+\justify \hspace{\parindent}
+2- \textit{Réaliser le bon \textbf{placement donnée-thread/mémoire-nœud} (Mapper les don-nées de telle façon de réduire la \textbf{latence des accès mémoire} et de maximiser la bande passante)}. 
+
+\justify \hspace{\parindent}
+3- \textit{\textbf{Equilibrer la charge} entre les cœurs/nœuds de calculs}.
+
+\justify \hspace{\parindent}
+4- \textit{Garder certaine \textbf{proximité spatiale et temporelle} entre les tâches dépendantes lors de l'exécution afin de préserver la \textbf{localité des données}}.
+
+\section{Objectifs de la thèse} 
+\justify \hspace{\parindent}
+Le but de cette thèse est de :
+
+\justify \hspace{\parindent}
+1- \textit{Déterminer les enjeux et les opportunités concernant l'exploitation efficace de machines multicœurs NUMA par des applications parallèle à base de tâches dépendantes décrite par un DAG, en optimisant son ordonnancement}.
+
+\justify \hspace{\parindent}
+2- \textit{Proposer des mécanismes efficaces pour le placement de tâches et de données, améliorant la localité des accès à la mémoire ainsi que les performances systèmes, en optimisant le placement des données associes aux tâches}. 
+
+\justify \hspace{\parindent}
+Les décisions de placement sont basées sur l'exploitation des informations sur les dépendances entre tâches disponibles via des annotations et d'autre technique fournies par les langages de programmation parallèle à base de tâches et les \textbf{supports exécutifs modernes (runtime)}. 
+
+\section{Contributions} 
+\justify \hspace{\parindent}
+Dans ce contexte, l'objectif principal de cette thèse est  d'assurer un ordonnancement efficace des tâches d'un DAG sur des machines NUMA multicœurs en contrôlant le placement des données associes aux tâches en exécutions en favorisant la proximité spatiale et temporelle (\textbf{affinité mémoire}). 
+
+\justify \hspace{\parindent}
+La contribution majeure de cette thèse consiste à concevoir une approche d'ordonnance-ment d'un DAG dans le contexte NUMA qui favorisent l'affinité mémoire tâche/donnée et la proximité de voisinage tâche/tâche en minimisant la métrique classique d'un problème d'ordonnancement qui est le temps total d'exécution des tâches. Nos contributions : 
+
+\justify \hspace{\parindent}
+1- \textit{Réalisation d'un \textbf{simulateur NUMA} dont les principaux aspects des plateformes NUMA ont été implémenté dans d’un simulateur que nous avons utilisé pour les évaluations présentées dans ce travail}.
+
+\justify \hspace{\parindent}
+2- \textit{Etude et comparaison de l'impact des politiques d'ordonnancement des tâches / placement des données sur les performances des applications sur les plateformes NUMA dont les tâches sont indépendantes (pas de communication ou partage des données entre les tâches)}.
+
+\justify \hspace{\parindent}
+3- \textit{Conception d'un algorithme d'ordonnancement basé sur l'heuristique \textbf{Horizon d'exécution adapté NUMA} qui consiste à partitionner l'ensemble des tâches en plusieurs classes disjointes en fonction de l'état courant d'exécution des tâches et sélectionner celle qui va élargir cet horizon}. 
+
+\justify \hspace{\parindent}
+4- \textit{\textbf{Equilibrage de charge} dynamique entre les nœud/cœurs de la plateforme en utilisant une stratégie de \textbf{vol de travail} adapté pour NUMA basé sur la \textbf{matrice distance} de la plateforme}. 
+
+\section{Plan et Organisation de la thèse}
+\justify \hspace{\parindent}
+Ce document s’organise de la façon suivante : 
+
+\justify \hspace{\parindent}
+1- Le \textbf{présent chapitre} introduit le contexte, la motivation et la contribution de notre étude. 
+
+\justify \hspace{\parindent}
+2- Le \textbf{deuxième chapitre} est consacré à la présentation de l'évolution de la technologie des microprocesseurs, des architectures parallèles et en particulier SMP-UMA et la platefor-me NUMA. Nous exposons les concepts clés qui ont une relation directe sur l'exécution des applications parallèles.
+
+\justify \hspace{\parindent}
+3- Le \textbf{troisième chapitre} présente le modèle de la description des applications parallèles à base de tâches et en particulier le modèle du graphe de tâches (DAG) qui est le sujet de notre étude. La terminologie associée à ce contexte est expliquée dans cette partie en commençant par le processus de la description, ensuite le processus de l'exécution et à la fin les algorithmes utilisés.
+
+\justify \hspace{\parindent}
+4- Le \textbf{quatrième chapitre} présente l'état de l'art des algorithmes d'ordonnancement placement dans le contexte des Multicœurs et de NUMA en dressant un panorama des politiques d'ordonnancement/placement existants
+
+\justify \hspace{\parindent}
+5- Dans le \textbf{cinquième chapitre}, nous introduisons nos \textbf{heuristiques} pour améliorer les algorithmes existants d'ordonnancement NUMA et équilibrer la charge des supports exécutifs.
+
+\justify \hspace{\parindent}
+6- Le \textbf{sixième chapitre} est consacré à l'introduction du simulateur réalisé ainsi que la simulation des algorithmes  donnés dans le chapitre précédents suivi par une analyse des résultats des différents scenarios expérimentés.
+
+\justify \hspace{\parindent}
+7- Le \textbf{dernier chapitre} comme conclusion de ce travail, il récapitule nos principales contributions. Il présente également les pistes de recherche futures à explorer et l’extension de nos travaux à d’autres champs d’application (NUMA clusters ou autre).
+
+%--------------------------------------------
+\section{Production scientifique} 
+\justify \hspace{\parindent}
+Ce travail a mené à la \textbf{publication} deux articles acceptés dans les revues EEA  et IJIST ainsi qu’une version initiale présentée dans la conférence LAPECI.
+
+\begin{itemize}
+  \item Mohamed Slimane et Larbi Sekhri. Modeling the Scheduling Problem of Identi-cal Parallel Machines with Load Balancing by Time Petri Nets. In, International Journal of Intelligent Systems Technologies and Applications, déc. 2014, p. 42-48. \cite{slim1214}
+
+  \item Mohamed SLIMANE et Larbi SEKHRI. HLSMN High level Multicore NUMA Simulator. In: Electrotehnica, Electronica, Automatica, vol. 65, no. 3, pp. 170-175 (2017). url: http://www.eea-journal.ro/ro/d/5/p/EEA65325. \cite{slim17}
+
+  \item Mohamed SLIMANE, Larbi SEKHRI, 'Parallel Pipelined Implementation of DES Cryptographic Algorithm on Multicore Machines', 1éres journées Scientifi-ques du Laboratoire d’Architectures Parallèles, Embarquées et du Calcul intensif (LAPECI) 28 et 29 septembre 2014, Oran, Algérie.\cite{slim914}
+\end{itemize}

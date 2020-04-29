@@ -1,0 +1,79 @@
+﻿\chapter{Conclusion et perspectives}\label{chapter:concusion}
+%
+Dans le cadre de cette thèse, nous avons étudié le problème de l'ordonnancement des applications parallèles décrites par un graphe de tâches DAG qui s'exécutent sur la plateforme à accès mémoire non uniforme NUMA dont les tâches partagent et échangent des données. En plus de l'aspect ordonnanccement des tâches et l'allocation de processeurs / coeurs aux tâches, un deuxieme aspect qui se manifeste dans ce contexte est le placement des données des tâches sur les mémoires des noeuds puisque la cible est non unforme et asymmétrique pour l'opération des accès mémoire. Cette asymmétrie qui se manifeste par un temps d'accès mémoire different et non néglegeable  pour les données d'une tâches qui résident sur une mémoire d'un noeud différent de celui sur lequel la tâche tourne.
+
+Cet ordonnancement et placement dynamique nous imposent une connaissance impar-faite des conditions d’exécution (nous ne connaissons pas la durée de chaque tâches, le volume exacte des données  échangées, certains paramètres de la plateforme d'exécution). 
+En pratique, ce manque d’informations affaiblit fortement les performances des différents algorithmes envisageables.
+%
+%Comme nous avons cité au début que les principaux défis sur les plates-formes NUMA pour ordonnancer une application parallèle décrite par un graphe de tâches dépendantes acyclique (DAG) sont :
+%
+%1- Réaliser la bonne allocation tâche/thread-nœud (Trouver l'ordre optimal pour exécuter les tâches de ce DAG sur les nœuds de la plate-forme).
+%
+%2- Réaliser le bon placement donnée-thread/mémoire-nœud (Mapper les données de telle façon de réduire la latence des accès mémoire et de maximiser la bande passante). 
+%
+%3- Equilibrer la charge entre les cœurs/nœuds de calculs.
+%
+%4- Garder certaine proximité spatiale et temporelle entre les tâches dépendantes  lors de l'exécution.
+%
+%Afin d'entamer un travail de recherche sur ce problème, nous avons fixé au début certains objectif qui nos permettent fixer le cadre du travail. Permis ces objectifs :
+%
+%1- Optimiser l'ordonnancement des applications parallèles à base de tâches dépendantes sur l'architecture NUMA.%
+%
+%2- proposer des mécanismes efficaces pour le placement de tâches et de données, améliorant la localité des accès à la mémoire ainsi que les performances systèmes, en optimisant le placement des données associes aux tâches. (augmenter la localité des accès aux données et ainsi de réduire la la pénalité NUMA)
+%
+Nous avons cherché à travers notre travail à tirer parti de la moindre information disponible pour réduire l’impact de la pénalité NUMA au maximum. Afin de réaliser ces objectifs, nous avons proposé des heuristiques qui visent à améliorer ces deux processus dans ce contexte. 
+
+La première idée était de collecter, au début de l'exécution, plus d'informations prove-nant de l’application parallèle à exécuter et de la plateforme cible et d'utiliser cette information pour guider le processus de l'ordonnancement et le placement (la structure DAG de l'application, la topologie de la plateforme,..). A chaque instant ou un évenement se produit en changeant l'état d'exécution (le début/la fin de l'exécution d'une tâche, déclencher un accès mémoire (R/W),..), l'information collectée est mis à jour.   
+%Par la suite, nous rappelons les résultats que nous avons obtenus, les limites de notre travail, ainsi que les perspectives que nous envisageons. Nous présentons ensuite les apports de notre recherche, avant de conclure.
+%
+\section{Résultats}
+%
+Nous avons réalisé un ensemble d’expériences testant les algorithmes proposés via la simulation. 
+Nous avons mis en évidence la réduction de la pénalite NUMA qui se traduit effectivement par une amélioration des temps total d'exécution. 
+Enfin, nous avons montré que l’utilisation de vol de travail basé sur la distance permet réellement d’étendre le champs d’application du vol de
+travail aléatoire vers des platesformes hiérarchique NUMA.
+
+Le premier lot d'expériences, c'était l'ordonnancement des tâches indépendantes en combinant les politiques ordonnancement et placement classiques juste pour mesurer l'éffet de cette combinaison sur la pénalité NUMA et son impact sur le temps total d'exécution.
+Ces expériences réalisées montrent que certaines combinaison aident à amélio-rer la premiere métrique $C_{max}$ par contre elle échoue à réduire la pénalite (le cas FFLB) et l'inverse pour d'autres cas (RRFT).
+
+Le deuxieme scénario est de tester et valider nos propres heuristiques. Notre travail de simulation se divise en deux
+parties. \\
+- La première tente d'évaluer l'heuristique horizon d'exécution étendu sur un DAG; \\
+- La seconde quant à elle tente de valider le vol de travail basé sur la distance. 
+
+%Les heuristiques simulées ont montré que certains objectifs fixés ont été atteints. 
+Nous avons pu exploiter certaines informations collectées à différents niveau pour guider le processus de l'ordonnancement placement dans le contexte NUMA.  
+
+%
+L'heuristique de l'horizon d'exécution a été expérimentée sur plusieurs DAG et des plateformes différentes. 
+Les résultats obtenus montrent que l'integration de heuristique XH a donné dans la plupart des cas des écarts positifs en améliorant le temps total d'éxecution jusqu'à 6\% en moyenne par rapport la strategie normale. Par contre, Les resultats présentés pour la métrique NUMA ratio montrent que l'impact de l'intégration de l'heuristique XH n'a pas été significatif pour réduire le nombre d'accès distant malgré que dans la plupart des tests, elle a contribué à réduire cette pénalité mais cette réduction n'etait pas suffisante vu que la plage des valeurs reste très importante et l'écart trouvé relativement faible.
+
+%
+L'heuristique du vol de travail basé sur la distance dont l'idée est de faire des tentatives de vol en commencant d'abord par les plus proches voisins qui sont loin du noeud voleur d'une certaine distance si cette tentative reussit alors le voleur continue son travail ordinnaire sinon il va chercher ailleurs chez des voisins distants en se limitant à une distance supérieure à la précédente. s'il y des tâches à volées alors il le fait et il reprend son travail. Sinon il refait le meme processus en incrémentant la distance jusqu'à la reussite de la tentative ou l'atteinte de la distance maximale. Cette heuristique a été testée avec une série de tâches (plus de 1400) et sur une plateforme NUMA de configuration moyenne. Elle a donné des  bons résultats par rapport l'algorithme brut sans mécanisme d'équilibrage de charge et par rappport l'approche utilisant le vol de travail classique basé sur la sélection aléatoire de la tâche à voler. En moyenne, cette stratégie a pu réduire la charge à 20\% (les valeurs mesurées en moyenne n'ont pas dépassé le pic 50 tâches par noeud par contre les deux autres ont atteint un pic de 70 tâches) en comparant avec les deux autres avec un faible écart par rapport les seuils fixés pour l'état $VICTIM$ et $THIEF$ au cours de l'exécution. Une charge stable et équilibrée contribue à réduire le temps total d'exécution de l'ensemble des tâches et à gagner en accelération pour l'application parallèlle.
+
+Nous avons également montré, en simulant le vol de travail adapté à NUMA, que cette technique peut contribuer à réduire l'impact NUMA sur les applications parallèles en équilibrant la charge sur les nœuds de la plateforme.
+%
+\section{Limites}
+%
+Comme tout travail de recherche, certainement cette thèse a des limites : 
+
+- Certes que la simulation est un moyen limité pour valider et juger objectivement les résultats d'une recherche 
+mais elle reste un outil à faible coût qui permet de tester les idées et de les raffiner avant d'appliquer cela à un système réel ou de production (minimiser les risques).    
+
+- Nous avons évalué nos heuristiques sur un jeu de test synthetique (DAG format STG enrichi avec l'information du partage des données). 
+Bien que cette méthode n'est pas suffisante à elle seule pour donner des resultats proches de la réalité.
+
+- Manque d'une validation statistique des résultats de la simulation.
+%
+\section{Perspectives}
+%
+Les principales perspectives de recherche qui apparaissent à l'issue de cette thèse concernent la continuité de notre travail. Elles sont de plusieurs ordres.
+
+- À plus court terme et pour valider résultats obtenus par simulations, nous pouvons envisager d'implementer ces heuristiques dans un ordonnannceur d'un systeme d'exploita-tion réel tel que linux et tester cela sur une machine NUMA et cluster NUMA avec des applications parallèles réelles afin de voir l'apport de ces heuristiques. 
+
+- À moyen terme, L'ajout d'autres aspects comme la migration des tâches, le routage des réseaux d'interconnexion, etc peut etre considéré.
+Ainsi que l'amélioration du simulateur, en faisant intégrer la cohérence au cache. 
+
+- Afin de modéliser les aspects rencontrés dans ce travail, il serait envisageable de faire une analyse théorique surtout pour le vol de travail basé sur la distance. 
+
+Au final, nous espérons avoir montré, à travers nos travaux, que d'une part l'aspect asymmétrique des plateformes NUMA ne pose pas un probleme très contraignant pour les applications déja dévelopées pour UMA pour sa portabilité. d'autre part, l’absence d’informations (volume de données échangées, la durée des tâches,...) lors de l’ordonnance-ment/placement d’applications parallèle à base de tâches décrite par un DAG n'est pas forcément une des contraintes insurmontables.
